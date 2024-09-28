@@ -1,0 +1,138 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}Deelname id: {{ data.id }} - Bewerken{% endblock %}
+
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="/beheerder/dashboard" class="nav-link active" aria-current="page">
+      Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="/beheerder/onderzoeken" class="nav-link menu_text" >
+      Onderzoeken
+    </a>
+  </li>
+  <li>
+    <a  href="/beheerder/users" class="nav-link menu_text">
+      Gebruikers
+    </a>
+  </li>
+</ul>
+{% endblock %}
+{% block inner_content %}
+<br>
+<form method="POST" action="/beheerder/dashboard/attendance_request/{{ data.id }}/edit/save">
+    {% csrf_token %}
+<div class="container rounded-top border border-bottom-0 bg-primary-subtle text-center">
+    <div class="col text-center position-relative">
+        <H2 class="pt-2">
+            {{ data.ervaringsdeskundige.first_name }} {{ data.ervaringsdeskundige.last_name }} deelname aan {{ data.onderzoeks.titel }} 
+        </H2>
+        <div class="position-absolute buttons" style="bottom: 10px;">
+            <button type="submit" class="btn btn-primary">Opslaan</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='../{{ data.id }}';">Annuleer</button>
+        </div>
+        <H2 class="mb-1 h6">Deelnaame Id: {{ data.id}}</H2>
+        <div class="d-flex pt-2 mb-0 justify-content-center">
+            <div class="form-floating mb-2">
+                <select aria-label="Kuering" id="status_select" name="status" class="form-select">
+                    {% if data.status == 1 %}
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=3>Afgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 2 %}
+                        <option value=2>Goedgekeurd</option>
+                        <option value=1>In afwachting</option>
+                        <option value=3>Afgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 3 %}
+                        <option value=3>Afgekeurd</option>
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 4 %}
+                        <option value=4>Gesloten</option>
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=3>Afgekeurd</option>
+                    {% endif %}
+                </select>
+                <label for="status_select">Status</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container border rounded-bottom bg-body text-start" style="min-height: 25rem;">
+    <div class="row m-1 border-bottom">
+        <div class="col-md-auto">
+            <H2 class="h3">Omschrijving onderzoek</H2>
+            <div class="container-fluid">
+                <p class="text-start p-0">{{ data.onderzoeks.omschrijving }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Onderzoek doelgroep</H2>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Leeftijd:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.onderzoeks.doelgroep_leeftijd_van }} - {{ data.onderzoeks.doelgroep_leeftijd_tot }} jaar oud
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Beperkingen:</H3>
+            <div class="container-fluid">
+                <p>
+                    {% for limitation in research_limitations %}
+                        {{ limitation.omschrijving }}{% if not forloop.last %},{% endif %}
+                    {% empty %}
+                        Geen
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Ervaringsdeskundige informatie</H2>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Geboortedatum:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.ervaringsdeskundige.geboortedatum }} 
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Beperkingen:</H3>
+            <div class="container-fluid">
+                <p>
+                    {% for limitation in experience_expert_limitations %}
+                        {{ limitation.omschrijving }}{% if not forloop.last %},{% endif %}
+                    {% empty %}
+                        Geen
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 id="reached_out_select_label" class="h5">Contact doorgestuurt naar bedrijf:</H3>
+            <div class="container-fluid mb-2">
+                <select aria-labelledby="reached_out_select_label" id="reached_out_select" name="contact" class="form-select mb-1">
+                    {% if data.contact == 0 %}
+                        <option value=0>Nee</option>
+                        <option value=1>Ja</option>
+                    {% elif data.contact == 1 %}
+                        <option value=1 >Ja</option>
+                        <option value=0>Nee</option>
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+    </div>    
+</div>
+</form>
+{% endblock %}

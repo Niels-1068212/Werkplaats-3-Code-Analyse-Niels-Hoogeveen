@@ -1,0 +1,572 @@
+{
+	"info": {
+		"_postman_id": "053eb5ba-5ec7-4dc1-af04-be88c5e6eee4",
+		"name": "WP3: Accessibility Hub",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33780885"
+	},
+	"item": [
+		{
+			"name": "permission_checking",
+			"item": [
+				{
+					"name": "organisatie/id without auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", () => {\r",
+									"  pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server_ip}}:{{server_port}}/api/organisatie/{{organisatie_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server_ip}}"
+							],
+							"port": "{{server_port}}",
+							"path": [
+								"api",
+								"organisatie",
+								"{{organisatie_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "organisatie/id modify ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", () => {\r",
+									"  pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"organisatie_id\":\"NOTALLOWED\",\r\n    \"contact_persoon\": \"Henk van der Hoek\",\r\n    \"email\": \"info@henho.nl\",\r\n    \"naam\": \"H&H Ondersteuning\",\r\n    \"beschrijving\": \"Wij zijn een commercieel bedrijf dat zich richt op het ondersteunen van mensen met een zorgbehoefte op het gebied van motorische of lichamelijke beperkingen.\",\r\n    \"telefoonnummer\": \"085 130 22 22\",\r\n    \"type\": \"1\",\r\n    \"website\": \"https://www.henho.nl\",\r\n    \"kvk\": \"473843\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{server_ip}}:{{server_port}}/api/organisatie/{{organisatie_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server_ip}}"
+							],
+							"port": "{{server_port}}",
+							"path": [
+								"api",
+								"organisatie",
+								"{{organisatie_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "organisatie/id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"contact_persoon\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"email\": {\r",
+							"      \"type\": \"string\",\r",
+							"      \"format\": \"email\"\r",
+							"    },\r",
+							"    \"naam\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"beschrijving\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"telefoonnummer\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"type\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"website\": {\r",
+							"      \"type\": \"string\",\r",
+							"      \"format\": \"uri\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\"contact_persoon\", \"email\", \"naam\", \"beschrijving\", \"telefoonnummer\", \"type\", \"website\"]\r",
+							"}\r",
+							"\r",
+							"pm.test('Schema validation', function() {\r",
+							"  pm.response.to.have.jsonSchema (schema);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{server_ip}}:{{server_port}}/api/organisatie/{{organisatie_id}}",
+					"protocol": "http",
+					"host": [
+						"{{server_ip}}"
+					],
+					"port": "{{server_port}}",
+					"path": [
+						"api",
+						"organisatie",
+						"{{organisatie_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "organisatie/id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", () => {\r",
+							"  pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"contact_persoon\": \"Henk van der Hoek\",\r\n    \"email\": \"info@henho.nl\",\r\n    \"naam\": \"H&H Ondersteuning\",\r\n    \"beschrijving\": \"Wij zijn een commercieel bedrijf dat zich richt op het ondersteunen van mensen met een zorgbehoefte op het gebied van motorische of lichamelijke beperkingen.\",\r\n    \"telefoonnummer\": \"085 130 22 22\",\r\n    \"type\": \"1\",\r\n    \"website\": \"https://www.henho.nl\",\r\n    \"kvk\": \"473843\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{server_ip}}:{{server_port}}/api/organisatie/{{organisatie_id}}",
+					"protocol": "http",
+					"host": [
+						"{{server_ip}}"
+					],
+					"port": "{{server_port}}",
+					"path": [
+						"api",
+						"organisatie",
+						"{{organisatie_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "organisatie/id/onderzoeken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+							"  \"type\": \"array\",\r",
+							"  \"items\": {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"      \"onderzoeks_id\": {\r",
+							"        \"type\": \"integer\",\r",
+							"      },\r",
+							"      \"titel\": {\r",
+							"        \"type\": \"string\"\r",
+							"      },\r",
+							"      \"status\": {\r",
+							"        \"type\": \"integer\",\r",
+							"      }\r",
+							"    },\r",
+							"    \"required\": [\"onderzoeks_id\", \"titel\", \"status\"]\r",
+							"  }\r",
+							"}\r",
+							"\r",
+							"\r",
+							"pm.test('Schema validation', function() {\r",
+							"  pm.response.to.have.jsonSchema (schema);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{server_ip}}:{{server_port}}/api/organisatie/onderzoeken",
+					"protocol": "http",
+					"host": [
+						"{{server_ip}}"
+					],
+					"port": "{{server_port}}",
+					"path": [
+						"api",
+						"organisatie",
+						"onderzoeken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "organisatie/id/onderzoeken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"omschrijving\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"doelgroep_leeftijd_tot\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"doelgroep_leeftijd_van\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"datum_tot\": {\r",
+							"      \"type\": \"string\",\r",
+							"      \"format\": \"date-time\"\r",
+							"    },\r",
+							"    \"met_beloning\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"titel\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"datum_vanaf\": {\r",
+							"      \"type\": \"string\",\r",
+							"      \"format\": \"date-time\"\r",
+							"    },\r",
+							"    \"status\": {\r",
+							"      \"type\": \"integer\",\r",
+							"      \"enum\": [1, 2, 3, 4]\r",
+							"    },\r",
+							"    \"type_onderzoek\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"omschrijving\",\r",
+							"    \"doelgroep_leeftijd_tot\",\r",
+							"    \"doelgroep_leeftijd_van\",\r",
+							"    \"datum_tot\",\r",
+							"    \"met_beloning\",\r",
+							"    \"titel\",\r",
+							"    \"datum_vanaf\",\r",
+							"    \"status\",\r",
+							"    \"type_onderzoek\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"pm.test('Schema validation', function() {\r",
+							"  pm.response.to.have.jsonSchema (schema);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"titel\": \"Tevredensheids onderzoek ondersteundende stoel\",\r\n        \"status\": 1,\r\n        \"omschrijving\": \"Wij zijn aan het onderzoeken welk type ondersteunende stoel het beste past bij onze doelgroep. In dit onderzoek plaatsen we bij u een stoel en vragen we u naar uw ervaringen.\",\r\n        \"datum_vanaf\": \"2024-02-27T00:00:00Z\",\r\n        \"datum_tot\": \"2024-02-28T00:00:00Z\",\r\n        \"type_onderzoek\": 1,\r\n        \"locatie\": \"Bij u thuis (omgeving Rotterdam)\",\r\n        \"doelgroep_leeftijd_van\": 18,\r\n        \"doelgroep_leeftijd_tot\": 65,\r\n        \"met_beloning\": 1,\r\n        \"beloning\": \"Deelname wordt beloond met een bedrag van €1200,-\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{server_ip}}:{{server_port}}/api/organisatie/onderzoeken",
+					"protocol": "http",
+					"host": [
+						"{{server_ip}}"
+					],
+					"port": "{{server_port}}",
+					"path": [
+						"api",
+						"organisatie",
+						"onderzoeken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "organisatie/id/onderzoeken/id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"omschrijving\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"doelgroep_beperking\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": {\r",
+							"        \"type\": \"string\"\r",
+							"      }\r",
+							"    },\r",
+							"    \"doelgroep_leeftijd_tot\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"doelgroep_leeftijd_van\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"datum_vanaf\": {\r",
+							"      \"type\": \"string\",\r",
+							"      \"format\": \"date-time\"\r",
+							"    },\r",
+							"    \"datum_tot\": {\r",
+							"      \"type\": \"string\",\r",
+							"      \"format\": \"date-time\"\r",
+							"    },\r",
+							"    \"experts\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": {\r",
+							"        \"type\": \"object\",\r",
+							"        \"properties\": {\r",
+							"          \"last_name\": {\r",
+							"            \"type\": \"string\"\r",
+							"          },\r",
+							"          \"bijzonderheden\": {\r",
+							"            \"type\": \"string\"\r",
+							"          },\r",
+							"          \"bijzonderheden_beschikbaarheid\": {\r",
+							"            \"type\": \"string\"\r",
+							"          },\r",
+							"          \"email\": {\r",
+							"            \"type\": \"string\",\r",
+							"            \"format\": \"email\"\r",
+							"          },\r",
+							"          \"geboortedatum\": {\r",
+							"            \"type\": \"string\",\r",
+							"            \"format\": \"date\"\r",
+							"          },\r",
+							"          \"gebruikte_hulpmiddelen\": {\r",
+							"            \"type\": \"string\",\r",
+							"          },\r",
+							"          \"postcode\": {\r",
+							"            \"type\": \"string\"\r",
+							"          },\r",
+							"          \"telefoonnummer\": {\r",
+							"            \"type\": \"string\"\r",
+							"          },\r",
+							"          \"voorkeur_benadering\": {\r",
+							"            \"type\": \"string\",\r",
+							"            \"enum\": [\"Telefonisch\", \"email\", \"Via internet\", \"Op locatie\"]\r",
+							"          },\r",
+							"          \"first_name\": {\r",
+							"            \"type\": \"string\"\r",
+							"          }\r",
+							"        },\r",
+							"        \"required\": [\r",
+							"          \"last_name\",\r",
+							"          \"bijzonderheden\",\r",
+							"          \"bijzonderheden_beschikbaarheid\",\r",
+							"          \"email\",\r",
+							"          \"geboortedatum\",\r",
+							"          \"gebruikte_hulpmiddelen\",\r",
+							"          \"postcode\",\r",
+							"          \"telefoonnummer\",\r",
+							"          \"voorkeur_benadering\",\r",
+							"          \"first_name\"\r",
+							"        ]\r",
+							"      }\r",
+							"    },\r",
+							"    \"onderzoeks_id\": {\r",
+							"      \"type\": \"integer\",\r",
+							"    },\r",
+							"    \"met_beloning\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"titel\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"status\": {\r",
+							"      \"type\": \"integer\",\r",
+							"    },\r",
+							"    \"type_onderzoek\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"omschrijving\",\r",
+							"    \"doelgroep_beperking\",\r",
+							"    \"doelgroep_leeftijd_tot\",\r",
+							"    \"doelgroep_leeftijd_van\",\r",
+							"    \"datum_vanaf\",\r",
+							"    \"datum_tot\",\r",
+							"    \"experts\",\r",
+							"    \"onderzoeks_id\",\r",
+							"    \"met_beloning\",\r",
+							"    \"titel\",\r",
+							"    \"status\",\r",
+							"    \"type_onderzoek\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test('Schema validation', function() {\r",
+							"  pm.response.to.have.jsonSchema (schema);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{server_ip}}:{{server_port}}/api/organisatie/onderzoeken/{{onderzoek_id}}",
+					"protocol": "http",
+					"host": [
+						"{{server_ip}}"
+					],
+					"port": "{{server_port}}",
+					"path": [
+						"api",
+						"organisatie",
+						"onderzoeken",
+						"{{onderzoek_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "{{api_key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "organisatie_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "onderzoek_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "server_ip",
+			"value": "127.0.0.1",
+			"type": "string"
+		},
+		{
+			"key": "server_port",
+			"value": "8000",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": "xzkz0OWxEvbZHCp",
+			"type": "string"
+		}
+	]
+}

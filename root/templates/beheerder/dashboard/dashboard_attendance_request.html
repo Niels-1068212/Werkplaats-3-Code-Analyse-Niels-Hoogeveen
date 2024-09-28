@@ -1,0 +1,20 @@
+<h2 class="text-center border-bottom pb-1 text-break h3">Deelname verzoeken: {{ count_attendance_request }}</h2>
+{% for item in attendance_request %}
+<div id="{{ item.id }}" class="card mb-3 md-2" style="cursor: pointer;" tabindex="0" onclick="location.href='dashboard/attendance_request/{{ item.id }}';">
+    <div class="card-body">
+        <h3 class="card-title text-center h5">{{ item.ervaringsdeskundige.first_name }} {{ item.ervaringsdeskundige.last_name }}</h3>
+        <h3 class="card-subtitle mb-2 text-body-secondary text-center h6">{{ item.onderzoeks.titel }}</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Onderzoek omschrijving:</strong>
+                <p class="mb-0">
+                    {{ item.onderzoeks.omschrijving }}
+                </p>
+            </li>
+            <li class="list-group-item text-center">
+                <button onclick="goedkeurenDeelnames('{{ item.id }}');" class="btn btn-success">Keur goed</button>
+                <button onclick="afkeurenDeelnames('{{ item.id }}');" class="btn btn-danger">Keur af</button>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endfor %}

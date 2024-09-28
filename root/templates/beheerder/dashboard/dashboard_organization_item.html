@@ -1,0 +1,101 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}{{ data.naam }} - Inzien{% endblock %}
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="/beheerder/dashboard" class="nav-link active" aria-current="page">
+      Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="/beheerder/onderzoeken" class="nav-link menu_text" >
+      Onderzoeken
+    </a>
+  </li>
+  <li>
+    <a  href="/beheerder/users" class="nav-link menu_text">
+      Gebruikers
+    </a>
+  </li>
+</ul>
+{% endblock %}
+{% block inner_content %}
+<br>
+<div class="container rounded-top border border-bottom-0 bg-primary-subtle text-center">
+    <div class="col text-center position-relative">
+        <H2 class="pt-2 h1">
+            {{ data.naam }} - Id: {{ data.organisatie_id}} 
+        </H2>
+        <div class="position-absolute buttons" style="bottom: 10px;">
+            <button type="button" class="btn btn-primary" onclick="location.href='{{ data.organisatie_id }}/edit';">Bewerk</button>
+            <button type="button" class="btn btn-primary">Verwijder</button>
+        </div>
+        <H2 class="mb-1 h6">
+            KVK: {{ data.kvk}} |
+            {% if data.type == '1' %}
+            Type: Commerciëel
+            {% elif data.type == '2' %}
+            Type: Non-profit
+            {% endif %}
+        </H2>
+        <H2 class="m-0 pb-1 h6">
+            {% if data.status == '1' %}
+            Status: In afwachting
+            {% elif data.status == '2' %}
+            Status: Goedgekeurd
+            {% elif data.status == '3' %}
+            Status: Afgekeurd
+            {% elif data.status == '4' %}
+            Status: Gesloten
+            {% elif data.status == '5' %}
+            Status: Verwijderd
+            {% endif %}
+        </H2>
+    </div>
+</div>
+<div class="container border rounded-bottom bg-body text-start" style="min-height: 25rem;">
+    <div class="row m-1 border-bottom">
+        <div class="col-md-auto">
+            <H2 class="h3">Omschrijving</H2>
+            <div class="container-fluid">
+                <p class="text-start p-0">{{ data.beschrijving }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Contact</H2>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Website:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.website }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Contact persoon:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.contact_persoon }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">E-mail:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.email }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Telefoonnummer:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.telefoonnummer }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

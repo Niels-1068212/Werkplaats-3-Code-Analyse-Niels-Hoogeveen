@@ -1,0 +1,301 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}{{ data.first_name }} {{ data.last_name }} - Bewerken{% endblock %}
+
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="/beheerder/dashboard" class="nav-link active" aria-current="page">
+      Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="/beheerder/onderzoeken" class="nav-link menu_text" >
+      Onderzoeken
+    </a>
+  </li>
+  <li>
+    <a  href="/beheerder/users" class="nav-link menu_text">
+      Gebruikers
+    </a>
+  </li>
+</ul>
+{% endblock %}
+{% block inner_content %}
+<br>
+<form method="POST" action="/beheerder/dashboard/experience_expert/{{ data.id }}/edit/save">
+    {% csrf_token %}
+<div class="container rounded-top border border-bottom-0 bg-primary-subtle text-center">
+    <div class="col text-center position-relative">
+        <div class="d-flex pt-2 mb-1 justify-content-center">
+            <label for="exp_first_name" class="input-group-text rounded-end-0 border-end-0">Voor naam</label>
+            <input id="exp_first_name" type="text" name="first_name" class="form-control rounded-start-0 rounded-end-0" value="{{ data.first_name }}" placeholder="{{ data.first_name }}" style="width: 20%;">
+            <label for="exp_last_name" class="input-group-text rounded-end-0 rounded-start-0 border-end-0 border-start-0">Achter naam</label>
+            <input id="exp_last_name" type="text" name="last_name" class="form-control rounded-start-0" value="{{ data.last_name }}" placeholder="{{ data.last_name }}" style="width: 20%;">
+            <H2 class="m-0 pb-1"> - Id: {{ data.id }}</H2>
+        </div>
+        <div class="position-absolute buttons" style="bottom: 10px;">
+            <button type="submit" class="btn btn-primary">Opslaan</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='../{{ data.id }}';">Annuleer</button>
+        </div>
+        <div class="d-flex justify-content-center">
+            <H2 class="mb-0 h6">
+                <label id="exp_username_label" for="exp_username">Gebruikersnaam:</label>
+                <input type="text" class="form-control" value="{{ data.username }}" placeholder="{{ data.username }}" id="exp_username" name="username" aria-labelledby="exp_username_label">
+            </H2>
+        </div>
+        <div class="d-flex mb-0 justify-content-center">
+            <div class="form-floating mb-2 mt-2">
+                <select aria-label="Kuering" id="status_select" name="status" class="form-select">
+                    {% if data.status == 1 %}
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=3>Afgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 2 %}
+                        <option value=2>Goedgekeurd</option>
+                        <option value=1>In afwachting</option>
+                        <option value=3>Afgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 3 %}
+                        <option value=3>Afgekeurd</option>
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 4 %}
+                        <option value=4>Gesloten</option>
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=3>Afgekeurd</option>
+                    {% endif %}
+                </select>
+                <label for="status_select">Status</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container border rounded-bottom bg-body text-start" style="min-height: 25rem;">
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Kenmerken</H2>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_birthdate_label">Geboortedatum:</h3>
+            <div class="container-fluid mb-2">
+                <input name="geboortedatum" class="form-control" type="date" aria-labelledby="exp_birthdate_label" value="{{ data.geboortedatum }}">
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_gender_label">Geslacht:</h3>
+            <div class="container-fluid mb-2">
+                <select class="form-select" name="geslacht" id="exp_gender" aria-labelledby="exp_gender_label">
+                    {% if data.geslacht == "M" %}
+                    <option value="M">Man</option>
+                    <option value="V">Vrouw</option>
+                    <option value="0">Anders</option>
+                    {% elif data.geslacht == "V" %}
+                    <option value="V">Vrouw</option>
+                    <option value="M">Man</option>
+                    <option value="0">Anders</option>
+                    {% else %}
+                    <option value="0">Anders</option>
+                    <option value="M">Man</option>
+                    <option value="V">Vrouw</option>
+                    {% endif %}  
+                </select>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Beperkingen:</h3>
+            <div class="container-fluid">
+                <div class="form-check">
+                    <h4 class="h6" label="Auditieve beperking" aria-label="Auditieve beperking">Auditieve beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Auditieve beperking" %}
+                            {% if limitation.id in experience_expert_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="auditieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="auditieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="auditieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="auditieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                  <br>
+                <div class="form-check">
+                    <h4 class="h6" label="Visuele beperking" aria-label="Visuele beperking">Visuele beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Visuele beperking" %}
+                            {% if limitation.id in experience_expert_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="visuele-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="visuele-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="visuele-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="visuele-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                  <br>
+                <div class="form-check">
+                    <h4 class="h6" label="Motorische / lichamelijke beperking" aria-label="Motorische / lichamelijke beperking">Motorische / lichamelijke beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Motorische / lichamelijke beperkingen" %}
+                            {% if limitation.id in experience_expert_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="motorische-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="motorische-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="motorische-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="motorische-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                  <br>
+                <div class="form-check">
+                    <h4 class="h6" label="Cognitieve / neurologische beperking" aria-label="Cognitieve / neurologische beperking">Cognitieve / neurologische beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Cognitieve / neurologische beperkingen" %}
+                            {% if limitation.id in experience_expert_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="cognitieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="cognitieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="cognitieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="cognitieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_helping_tools_label">Gebruikte hulpmiddelen:</h3>
+            <div class="container-fluid mb-2">
+                <textarea id="exp_helping_tools" type="text" name="gebruikte_hulpmiddelen" aria-labelledby="exp_helping_tools_label" class="form-control" placeholder="{{ data.gebruikte_hulpmiddelen }}">{{ data.gebruikte_hulpmiddelen }}</textarea>
+            </div>
+        </div>
+    </div>
+    {% if data.toezichthouder != NULL %}
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Toezichthouders</H2>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Naam:</H3>
+            <div class="container-fluid mb-2">
+                <label for="gard_1_first_name" class="input-group-text rounded-end-0 border-end-0">Voor naam</label>
+                <input id="gard_1_first_name" type="text" name="voornaam_1" class="form-control rounded-start-0 rounded-end-0" value="{{ data.Toezichthouders.voornaam_1 }}" placeholder="{{ data.Toezichthouders.voornaam_1 }}" aria-label="Toezichthouder 1 voornaam">
+                <label for="gard_1_last_name" class="input-group-text rounded-end-0 rounded-start-0 border-end-0 border-start-0">Achter naam</span>
+                <input id="gard_1_last_name" type="text" name="achternaam_1" class="form-control rounded-start-0" value="{{ data.Toezichthouders.achternaam_1 }}" placeholder="{{ data.Toezichthouders.achternaam_1 }}" aria-label="Toezichthouder 1 achternaam">
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Naam:</H3>
+            <div class="container-fluid mb-2">
+                <label for="gard_2_first_name" class="input-group-text rounded-end-0 border-end-0">Voor naam</label>
+                <input id="gard_2_first_name" type="text" name="voornaam_2" class="form-control rounded-start-0 rounded-end-0" value="{{ data.Toezichthouders.voornaam_2 }}" placeholder="{{ data.Toezichthouders.voornaam_2 }}" aria-label="Toezichthouder 2 voornaam">
+                <label for="gard_2_last_name" class="input-group-text rounded-end-0 rounded-start-0 border-end-0 border-start-0">Achter naam</label>
+                <input id="gard_2_last_name" type="text" name="achternaam_2" class="form-control rounded-start-0" value="{{ data.Toezichthouders.achternaam_2 }}" placeholder="{{ data.Toezichthouders.achternaam_2 }}" aria-label="Toezichthouder 2 achternaam">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Contact informatie</H2>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_telefoon_number_label">Telefoonnummer:</h3>
+            <div class="container-fluid mb-2">
+                <div class="container-fluid mb-2">
+                    <input type="tel" pattern="[0-9]{10}" class="form-control" id="exp_telefoon_number" name="telefoonnummer" aria-labelledby="exp_telefoon_number_label" value="{{ data.telefoonnummer }}" placeholder="{{ data.telefoonnummer }}">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_email_label">E-mail:</h3>
+            <div class="container-fluid mb-2">
+                <input type="email" class="form-control" id="exp_email" name="email" aria-labelledby="exp_email_label" value="{{ data.email }}" placeholder="{{ data.email }}">
+            </div>
+        </div>
+        {% if data.toezichthouder != NULL %}
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Toezichthouders telefoonnummer:</h3>
+            <div class="container-fluid mb-2">
+                <label for="gard_1_phonenumber" class="input-group-text rounded-end-0 border-end-0">Toezichthouder 1</label>
+                <input id="gard_1_phonenumber" type="tel" pattern="[0-9]{10}" name="telefoonnummer_1" class="form-control rounded-start-0 rounded-end-0" value="{{ data.Toezichthouders.telefoonnummer_1 }}" placeholder="{{ data.Toezichthouders.telefoonnummer_1 }}" aria-label="Toezichthouder 1 telefoonnummer">
+                <label for="gard_2_phonenumber" class="input-group-text rounded-end-0 rounded-start-0 border-end-0 border-start-0">Toezichthouder 2</label>
+                <input id="gard_2_phonenumber" type="tel" pattern="[0-9]{10}" name="telefoonnummer_2" class="form-control rounded-start-0" value="{{ data.Toezichthouders.telefoonnummer_2 }}" placeholder="{{ data.Toezichthouders.telefoonnummer_2 }}" aria-label="Toezichthouder 2 telefoonnummer">
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_postcode_label">Postcode:</h3>
+            <div class="container-fluid mb-2">
+                <input type="text" class="form-control" id="exp_postcode" name="postcode" aria-labelledby="exp_postcode_label" value="{{ data.postcode }}" placeholder="{{ data.postcode }}">
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Toevoegende informatie</H2>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_availability_exceptions_label">Bijzonderingen beschickbaarheid:</H3>
+            <div class="container-fluid mb-2">
+                <textarea id="exp_availability_exceptions" type="text" name="bijzonderheden_beschikbaarheid" aria-labelledby="exp_availability_exceptions_label" class="form-control" placeholder="{{ data.bijzonderheden_beschikbaarheid }}">{{ data.bijzonderheden_beschikbaarheid }}</textarea>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="exp_personal_exceptions_label">Bijzonderingen:</H3>
+            <div class="container-fluid mb-2">
+                <textarea id="exp_personal_exceptions" type="text" name="bijzonderheden" aria-labelledby="exp_personal_exceptions_label" class="form-control" placeholder="{{ data.bijzonderheden }}">{{ data.bijzonderheden }}</textarea>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5" id="preferred_approach_label">Voorkeur benadering:</H3>
+            <div class="container-fluid mb-2">
+                <input type="text" name="voorkeur_benadering" id="preferred_approach" class="form-control" value="{{ data.voorkeur_benadering }}" placeholder="{{ data.voorkeur_benadering }}" aria-labelledby="preferred_approach_label">
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Datum aangemeld:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.date_joined }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% if data.datum != NULL %}
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Keurings informatie:</H2>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Keurings datum:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.datum_goedgekeurd }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Gekeurings door:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.goedegekeurd_door }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+</form>
+{% endblock %}

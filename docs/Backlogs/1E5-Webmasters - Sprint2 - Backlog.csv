@@ -1,0 +1,8 @@
+﻿ID,Work Item Type,Title,State,Assigned To,Remaining Work,Team Project,Tags,Backlog Priority,Area ID,Iteration Path,Iteration ID,Area Path,Activity
+"180","Product Backlog Item","Realtime dashboard met onderzoeken","Done","Rachaan de Graaff <0976952@hr.nl>",,"Werkplaatsen_jaar1",,"333333333","39","Werkplaatsen_jaar1\Werkplaats3\Sprint2","6","Werkplaatsen_jaar1\1E5",
+"549","Product Backlog Item","Database opschonen en opvullen met normale test data.","New",,,"Werkplaatsen_jaar1",,"499899383","39","Werkplaatsen_jaar1\Werkplaats3\Sprint2","6","Werkplaatsen_jaar1\1E5",
+"525","Product Backlog Item","Registratieformulier toezichthouder popup en layout","New",,,"Werkplaatsen_jaar1",,"499910562","39","Werkplaatsen_jaar1\Werkplaats3\Sprint2","6","Werkplaatsen_jaar1\1E5",
+"182","Product Backlog Item","Onderzoeken api","Done","Niels Hoogeveen (1068212) <1068212@hr.nl>",,"Werkplaatsen_jaar1",,"1000031622","39","Werkplaatsen_jaar1\Werkplaats3\Sprint2","6","Werkplaatsen_jaar1\1E5",
+"185","Product Backlog Item","Gepersonaliseerde onderzoeken voor deelname","Committed",,,"Werkplaatsen_jaar1",,"1000094865","39","Werkplaatsen_jaar1\Werkplaats3\Sprint2","6","Werkplaatsen_jaar1\1E5",
+"169","Product Backlog Item","Profielgegevens aanpassen","Done","Niels Hoogeveen (1068212) <1068212@hr.nl>",,"Werkplaatsen_jaar1",,"1333384972","39","Werkplaatsen_jaar1\Werkplaats3\Sprint2","6","Werkplaatsen_jaar1\1E5",
+"419","Product Backlog Item","PRIORITEIT Het plannen en maken van de database","Done",,,"Werkplaatsen_jaar1",,"1333514058","39","Werkplaatsen_jaar1\Werkplaats3\Sprint2","6","Werkplaatsen_jaar1\1E5",

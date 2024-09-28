@@ -1,0 +1,144 @@
+{% extends "ervaringsdeskundige/base.html" %}
+{% load static %}
+{% block title %}{{ data.onderzoek.titel }} - Onderzoek inzien{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid" style="height: 94vh;">
+    <div class="row">
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+          <a href="#">
+            <img style="margin: 20px; margin-left: 5px;" src="{% static 'images/logo_accessibility.png' %}" width="200px" alt="Logo van Accessibility">
+          </a>
+            <div class="position-sticky">
+              <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                  <a href="/ervaringsdeskundige/dashboard"  class="nav-link menu_text">
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a href="/ervaringsdeskundige/onderzoeken" class="nav-link active" aria-current="page">
+                    Onderzoeken
+                  </a>
+                </li>
+                <li>
+                  <a href="/ervaringsdeskundige/registered_investigations" class="nav-link menu_text">
+                    Ingeschreven onderzoeken
+                  </a>
+                </li>
+                <li>
+                  <a href="/ervaringsdeskundige/completed_investigations" class="nav-link menu_text">
+                    Afgeronde onderzoeken
+                  </a>
+                </li>
+              </ul>
+              <hr>
+            </div>
+        </nav>
+
+        <div style="height: 94vh;" id="dashboard_main" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div id="dashboard_overflow">
+        <main >
+          <div class="text-center" style="padding-top: 20px;">
+            <div>
+                  <div id="search" style="height: 20px;">
+                    <a  style="margin-right: 20px;" onclick="toggleTheme()" tabindex="0"><i class="fa-solid fa-circle-half-stroke"></i>      Switch thema </a>
+                    <div class="dropdown">
+                      <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown menu met dashboard, profiel en loguit opties">
+                        <i class="fa-solid fa-user" style="padding-right: 15px;" width="32" height="32" class="rounded-circle me-2"></i>
+                        <strong>{{ user.first_name}} {{ user.last_name}}</strong>
+                      </a>
+                      <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                        <li><a class="dropdown-item" href="/ervaringsdeskundige/dashboard">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/ervaringsdeskundige/edit_profile">Profiel</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/ervaringsdeskundige/logout">Log uit</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <h1 style="margin: 10px; margin-left: 40px;" class="text-start extra-bold-header">Welkom {{ user.first_name }}👋!</h1>
+
+                  <div id="approved_alert" style="display: none;" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p id="notification-container" class="mb-0 ml-auto"></p>
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+          </div>
+          </div>
+
+          <div style="padding-top: 20px;">
+            <div class="m-4">
+              {% for investigation_id, data in investigations.items %}
+                <div class="d-flex square">
+                    <div class="p-4">
+                        <blockquote class="blockquote">
+                            <h2 style="color: white;" class="mb-0 mb-3 white_text h1">{{ data.onderzoek.titel }}</h1>
+                            <footer class="blockquote-footer white_text">Organisatie: <cite title="de groene aarbei"><strong>{{ data.organisatie.naam }}</strong></cite></footer>
+                          </blockquote>
+                    </div>
+                  <div class="rectangle p-5">
+
+                    <h3 class="h2"><strong>Omschrijving:</strong></h3>
+                    <hr>
+                    <p>{{ data.onderzoek.omschrijving }}</p>
+                    <br>
+                    <div class="row">
+                        <div style="padding-right: 60px;" class="col-md-8">
+                    <h3 class="h2"><strong>Overige details:</strong></h3>
+                    <hr>
+                    <p class="mb-0">
+                      <strong>Datum vanaf:</strong> {{ data.onderzoek.datum_vanaf }} <br>
+                      <strong> Datum tot:</strong> {{ data.onderzoek.datum_tot }} <br>
+                      <strong> Locatie: </strong>{{ data.onderzoek.locatie }} <br>
+                      <strong>Doelgroep leeftijd van: </strong>{{ data.onderzoek.doelgroep_leeftijd_van }} <br>
+                      <strong>Doelgroep leeftijd tot: </strong>{{ data.onderzoek.doelgroep_leeftijd_tot }} <br>
+                      {% if data.onderzoek.met_beloning == 1 %}
+                      <strong>Beloning: </strong>{{ data.onderzoek.beloning }} <br>
+                      {% endif %}
+                      <strong>Soort onderzoek: </strong>{{ data.onderzoek.soort_onderzoek }} <br>
+                      <strong>Type onderzoek: </strong>                        {% if not data.type_onderzoek.telefonisch and not data.type_onderzoek.internet and not data.type_onderzoek.locatie %}
+                      Niet beschikbaar
+                      {% endif %}
+                      <ul>
+                        {% if data.type_onderzoek.telefonisch %}
+                            <li>Telefonisch</li>
+                        {% endif %}
+                        {% if data.type_onderzoek.internet %}
+                            <li>Internet</li>
+                        {% endif %}
+                        {% if data.type_onderzoek.locatie %}
+                            <li>Op locatie</li>
+                        {% endif %}
+
+                    </ul>
+                      <br>
+                    </p>
+                    
+                    <p></p>
+                </div>
+                <div class="col-md-4 p-4 card_grey">
+                  <h3 class="white_text ">Beperkingen:</h3>
+                  <ul>
+                    {% for limitation in data.beperkingen %}
+                              <li>{{ limitation.omschrijving }}</li>
+                    {% endfor %}
+                </ul>
+                </div>
+                    
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+      </main>
+    </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+

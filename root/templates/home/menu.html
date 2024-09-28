@@ -1,0 +1,31 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a href="#">
+    <img style="margin-left: 20px;" src="{% static 'images/logo_accessibility.png' %}" width="200px" alt="Logo van Accessibility">
+  </a>
+  <div class="collapse justify-content-end navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav j space-between" style="margin-right: 50px;">
+      <li class="nav-item">
+        <a href="/" class="nav-link active" aria-current="page" href="#">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://www.accessibility.nl/contact">Contact</a>
+      </li>
+    </ul>
+
+      <button class="btn btn-outline-primary" type="button" onclick="location.href='/login'">
+        Login
+      </button>
+
+      <button style="margin: 10px;" class="btn btn-primary" type="button" onclick="showMessage()">Vraag onderzoek aan</button>
+  </div>
+</nav>
+
+<script>
+  function showMessage() {
+      alert("Het aanvragen van onderzoek werkt via de API.");
+  }
+</script>

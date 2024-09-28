@@ -1,0 +1,34 @@
+<h2 class="text-center border-bottom pb-1 text-break h3">Onderzoeken: {{ count_research }}</h2>
+{% for research_id, item in research.items %}
+<div class="card mb-3" style="cursor: pointer;" tabindex="0" onclick="location.href='dashboard/research/{{ item.research.onderzoeks_id }}';">
+    <div class="card-body">
+        <h3 class="card-title text-center h5">{{ item.research.titel }}</h3>
+        <h3 class="card-subtitle mb-2 text-body-secondary text-center h6"><strong>Van:</strong> {{ item.research.organisatie.naam }}</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <strong>Omschrijving:</strong>
+                <p class="mb-0">
+                    {{ item.research.omschrijving }}
+                </p> 
+            </li>
+            {% if item.research.soort_onderzoek == 1 %}
+            <li class="list-group-item"><strong>Type: </strong>Telefonisch</li>
+            {% elif item.research.soort_onderzoek == 2 %}
+            <li class="list-group-item"><strong>Type: </strong>Via internet</li>
+            {% elif item.research.soort_onderzoek == 3 %}
+            <li class="list-group-item"><strong>Type: </strong>Op locatie</li>
+            {% endif %}
+            <li class="list-group-item"><strong>Locatie: </strong>{{ item.research.locatie }}</li>
+            <li class="list-group-item"><strong>Doelgroep beperking: </strong>
+            {% for limitation in item.limitations %}
+                {{ limitation.omschrijving }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+            </li>
+            <li class="list-group-item text-center">
+                <button onclick="goedkeuren('{{ item.research.onderzoeks_id }}');" class="btn btn-success">Keur goed</button>
+                <button onclick="afkeuren('{{ item.research.onderzoeks_id }}');" class="btn btn-danger">Keur af</button>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endfor %}

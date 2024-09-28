@@ -1,0 +1,122 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}{{ data.naam }} - Bewerken{% endblock %}
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="/beheerder/dashboard" class="nav-link active" aria-current="page">
+        Dashboard
+      </a>
+    </li>
+    <li>
+      <a href="/beheerder/onderzoeken" class="nav-link menu_text" >
+        Onderzoeken
+      </a>
+    </li>
+    <li>
+      <a  href="/beheerder/users" class="nav-link menu_text">
+        Gebruikers
+      </a>
+    </li>
+</ul>
+{% endblock %}
+{% block inner_content %}
+<br>
+<form method="POST" action="/beheerder/dashboard/organization/{{ data.organisatie_id}}/edit/save">
+    {% csrf_token %}
+<div class="container rounded-top border border-bottom-0 bg-primary-subtle text-center">
+    <div class="col text-center position-relative">
+        <div class="d-flex pt-2 mb-1 justify-content-center">
+            <label for="organization_name" class="input-group-text rounded-end-0 border-end-0">Naam</label>
+            <input id="organization_name" type="text" name="naam" class="form-control rounded-start-0" value="{{ data.naam }}" placeholder="{{ data.naam }}" style="width: 20%;"> 
+            <H2 class="m-0 pb-1"> - Id: {{ data.organisatie_id}}</H2>
+        </div>
+        <input type="hidden" id="api_key" name="api_key" value="{{ data.api_key }}">
+        <div class="position-absolute buttons" style="bottom: -69px;">
+            <button type="submit" class="btn btn-primary">Opslaan</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='../{{ data.organisatie_id }}';">Annuleer</button>
+        </div>
+        <div class="d-flex mb-1 justify-content-center">
+            <H2 class="mb-0 h6">
+                <label for="kvk">KVK:</label>
+                <input type="number" min="0" class="form-control" value="{{ data.kvk }}" id="kvk" name="kvk" aria-label="KVK van organisatie">
+                <label id="org_type_label" class="mb-1" for="org_type">Type organisatie:</label> 
+                <select id="org_type" name="type" aria-labelledby="org_type_label" class="form-select mb-0">
+                    {% if data.type == '1' %}
+                        <option value='1'>Commerciëel</option>
+                        <option value='2'>Non-profit</option>
+                    {% elif data.type == '2' %}
+                        <option value='2'>Non-profit</option>
+                        <option value='1'>Commerciëel</option>
+                    {% endif %}
+                </select>
+            </H2>
+        </div>
+    </div>
+    <div class="d-flex pt-2 mb-0 justify-content-center">
+        <div class="form-floating mb-2">
+            <select aria-label="Kuering" id="status_select" name="status" class="form-select">
+                {% if data.status == '1' %}
+                    <option value='1'>In afwachting</option>
+                    <option value='2'>Goedgekeurd</option>
+                    <option value='3'>Afgekeurd</option>
+                    <option value='4'>Gesloten</option>
+                {% elif data.status == '2' %}
+                    <option value='2'>Goedgekeurd</option>
+                    <option value='1'>In afwachting</option>
+                    <option value='3'>Afgekeurd</option>
+                    <option value='4'>Gesloten</option>
+                {% elif data.status == '3' %}
+                    <option value='3'>Afgekeurd</option>
+                    <option value='1'>In afwachting</option>
+                    <option value='2'>Goedgekeurd</option>
+                    <option value='4'>Gesloten</option>
+                {% elif data.status == '4' %}
+                    <option value='4'>Gesloten</option>
+                    <option value='1'>In afwachting</option>
+                    <option value='2'>Goedgekeurd</option>
+                    <option value='3'>Afgekeurd</option>
+                {% endif %}
+            </select>
+            <label for="status_select">Status</label>
+        </div>
+    </div>
+</div>
+<div class="container border rounded-bottom bg-body text-start" style="min-height: 25rem;">
+    <div class="row m-1 border-bottom">
+        <div class="col-md-auto">
+            <H2 class="h3" id="organization_description_label">Omschrijving</H2>
+            <div class="container-fluid mb-2">
+                <textarea id="organization_description" type="text" name="beschrijving" aria-labelledby="organization_description_label" class="form-control" placeholder="{{ data.beschrijving }}">{{ data.beschrijving }}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Contact</H2>
+        <div class="col-md-auto border-end">
+            <h3 class="h5" id="org_website_label">Website:</h3>
+            <div class="container-fluid mb-2">
+                <input type="url" class="form-control" id="org_website" name="website" aria-labelledby="org_website_label" value="{{ data.website }}" placeholder="{{ data.website }}">
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5" id="contact_person_label">Contact persoon:</h3>
+            <div class="container-fluid mb-2">
+                <input type="text" class="form-control" id="contact_person" name="contact_persoon" aria-labelledby="contact_person_label" value="{{ data.contact_persoon }}" placeholder="{{ data.contact_persoon }}">
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5" id="org_email_label">E-mail:</h3>
+            <div class="container-fluid mb-2">
+                <input type="email" class="form-control" id="org_email" name="email" aria-labelledby="org_email_label" value="{{ data.email }}" placeholder="{{ data.email }}">
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5" id="org_telefoon_number_label">Telefoonnummer:</h3>
+            <div class="container-fluid mb-2">
+                <input type="tel" pattern="[0-9]{10}" class="form-control" id="org_telefoon_number" name="telefoonnummer" aria-labelledby="org_telefoon_number_label" value="{{ data.telefoonnummer }}" placeholder="{{ data.telefoonnummer }}">
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}

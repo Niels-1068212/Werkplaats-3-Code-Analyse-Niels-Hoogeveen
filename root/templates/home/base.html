@@ -1,0 +1,58 @@
+{% load static %}
+<!doctype html>
+<html lang="nl">
+    <head>
+        {% block head %}
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <script src="https://kit.fontawesome.com/1395c9ece5.js" crossorigin="anonymous"></script>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+        <!-- Bootstrap Select CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+        <!-- bootstrap bundel -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/js/bootstrap.bundle.min.js" ></script>
+
+        <!-- Popper.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <!-- Bootstrap Select JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
+
+
+          <link href="{% static 'css/main.css' %}" rel="stylesheet">
+          <title>{% block title %}{% endblock %}</title>
+        {% endblock %}
+    </head>
+  <body>
+    {% include "home/menu.html" %}
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+      {% block footer %}
+      {% endblock %}
+    </div>
+    <script>
+      $(document).ready(function () {
+          $('.selectpicker').selectpicker();
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+              const body = document.body;
+              body.classList.toggle('white');
+            });
+
+  </script>
+  
+  </body>
+</html>

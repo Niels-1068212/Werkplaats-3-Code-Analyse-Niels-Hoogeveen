@@ -1,0 +1,10 @@
+﻿ID,Work Item Type,Title,State,Assigned To,Remaining Work,Team Project,Tags,Backlog Priority,Area ID,Iteration Path,Iteration ID,Area Path,Activity
+"444","Product Backlog Item","Dashboard ontwerp voor ervaringsdeskundige","New",,,"Werkplaatsen_jaar1",,"500000000","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"162","Product Backlog Item","Inlogsysteem beheerder","Done","Niels Hoogeveen (1068212) <1068212@hr.nl>",,"Werkplaatsen_jaar1",,"666666666","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"443","Product Backlog Item","Dashboard ontwerp voor beheerder","Done","Rachaan de Graaff <0976952@hr.nl>",,"Werkplaatsen_jaar1",,"666666666","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"165","Product Backlog Item","Registreren en inloggen ervarinsdeskundigen","Done","Anas Amhaou (1077402) <1077402@hr.nl>",,"Werkplaatsen_jaar1",,"1333333334","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"167","Product Backlog Item","Goedkeuren registraties","Committed",,,"Werkplaatsen_jaar1",,"1333359153","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"171","Product Backlog Item","API voor organisaties","Done","Rachaan de Graaff <0976952@hr.nl>",,"Werkplaatsen_jaar1",,"1333410790","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"196","Product Backlog Item","Leren werken met Django","Done","Niels Hoogeveen (1068212) <1068212@hr.nl>",,"Werkplaatsen_jaar1",,"1333436608","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"197","Product Backlog Item","Leren werken met Javascript","Done",,,"Werkplaatsen_jaar1",,"1333462425","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",
+"299","Product Backlog Item","Styling","Committed",,,"Werkplaatsen_jaar1",,"1333488242","39","Werkplaatsen_jaar1\Werkplaats3\Sprint 1","3","Werkplaatsen_jaar1\1E5",

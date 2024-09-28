@@ -1,0 +1,85 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}Alle Onderzoeken{% endblock %}
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="/beheerder/dashboard" class="nav-link menu_text" >
+      Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="/beheerder/onderzoeken" class="nav-link active" aria-current="page">
+      Onderzoeken
+    </a>
+  </li>
+  <li>
+    <a  href="/beheerder/users" class="nav-link menu_text">
+      Gebruikers
+    </a>
+  </li>
+</ul>
+{% endblock %}
+{% block inner_content %}
+<script>
+    function goedkeuren(onderzoeksId) {
+        updateStatus(onderzoeksId, 2);
+    }
+
+    function afkeuren(onderzoeksId) {
+        updateStatus(onderzoeksId, 3);
+    }
+
+function updateStatus(onderzoeksId, nieuweStatus) {
+    fetch(`/beheerder/update_status/${onderzoeksId}/${nieuweStatus}/`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            location.reload();
+        })
+        .catch(error => console.error('Error:', error));
+}
+</script>
+            <!-- onderzoeken uit db halen en loopen met bewerk en verwijderen knoppen -->
+            <br>
+            <div class="container rounded-top border border-bottom-0 text-center">
+                <table class="table">
+                      <thead>
+                      <tr>
+                          <th scope="col">Titel</th>
+                          <th scope="col">Omschrijving</th>
+                          <th scope="col">Datum vanaf</th>
+                          <th scope="col">Datum tot</th>
+                          <th scope="col">Locatie</th>
+                          <th scope="col">Opmerking beheerder</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Actie</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        {% for onderzoek in onderzoeken %}
+                            <tr>
+                                <td>{{ onderzoek.titel }}</td>
+                                <td>{{ onderzoek.omschrijving }}</td>
+                                <td>{{ onderzoek.datum_vanaf }}</td>
+                                <td>{{ onderzoek.datum_tot }}</td>
+                                <td>{{ onderzoek.locatie }}</td>
+                                <td>{{ onderzoek.opmerkingen_beheerder }}</td>
+                                <td>{{ onderzoek.status }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/beheerder/dashboard/research/{{ onderzoek.onderzoeks_id }}/edit';">Bewerk</button>
+                                    <a href="{% url 'verwijder_onderzoek' onderzoek.onderzoeks_id %}" class="btn btn-danger">Verwijderen</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                          {% for admin in pending_admins %}
+                      <tr>
+                          <td><a href="/beheerder/checkout_admin/{{ admin.id }}">{{ admin.first_name }} {{ admin.last_name}}</a></td>
+                          <td>{{ admin.email }}</td>
+                          <td>{{ admin.functie }}</td>
+                          <td>{% if admin.status == 1 %}In afwachting... {% endif %}</td>
+                      </tr>
+                      {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+{% endblock %}

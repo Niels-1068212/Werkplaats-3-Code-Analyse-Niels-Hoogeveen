@@ -1,0 +1,23 @@
+{% load static %}
+<div id="topbar">
+  <a href="#">
+    <img style="margin: 20px;" src="{% static 'images/logo_accessibility.png' %}" width="200px" alt="test">
+  </a>
+  <div id="search">
+      <i id="search_icon" class="fa-solid fa-magnifying-glass"></i>
+      <h3 id="search_name">Zoeken</h3>
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-solid fa-user" style="padding-right: 15px;" width="32" height="32" class="rounded-circle me-2"></i>
+          <strong>{{ user.first_name}} {{ user.last_name}}</strong>
+        </a>
+        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
+          <li><a class="dropdown-item" href="/beheerder/dashboard">Dashboard</a></li>
+          <li><a class="dropdown-item" href="/beheerder/edit_profile">Profiel</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="/beheerder/logout">Log uit</a></li>
+        </ul>
+      </div>
+  </div>
+</div>
+

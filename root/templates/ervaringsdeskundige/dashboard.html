@@ -1,0 +1,238 @@
+{% extends "ervaringsdeskundige/base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-fluid" style="height: 94vh;">
+    <div class="row">
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+          <a href="#">
+            <img style="margin: 20px; margin-left: 5px;" src="{% static 'images/logo_accessibility.png' %}" width="200px" alt="Logo van Accessibility">
+          </a>
+            <div class="position-sticky">
+              <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                  <a href="#" class="nav-link active" aria-current="page">
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a href="/ervaringsdeskundige/onderzoeken" class="nav-link menu_text">
+                    Onderzoeken
+                  </a>
+                </li>
+                <li>
+                  <a  href="registered_investigations" class="nav-link menu_text">
+                    Ingeschreven onderzoeken
+                  </a>
+                </li>
+                <li>
+                  <a  href="/ervaringsdeskundige/completed_investigations" class="nav-link menu_text">
+                    Afgeronde onderzoeken
+                  </a>
+                </li>
+              </ul>
+              <hr>
+            </div>
+        </nav>
+
+
+        <div style="height: 94vh;" id="dashboard_main" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div id="dashboard_overflow">
+        <main >
+          <div class="text-center" style="padding-top: 20px;">
+            <div>
+                  <div id="search" style="height: 20px;">
+                    <a  style="margin-right: 20px;" onclick="toggleTheme()" tabindex="0"><i class="fa-solid fa-circle-half-stroke"></i>      Switch thema </a>
+                    <div class="dropdown">
+                      <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" aria-label="dropdown menu met dashboard, profiel en loguit opties">
+                        <i class="fa-solid fa-user" style="padding-right: 15px;" width="32" height="32" class="rounded-circle me-2"></i>
+                        <strong>{{ user.first_name}} {{ user.last_name}}</strong>
+                      </a>
+                      <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                        <li><a class="dropdown-item" href="/ervaringsdeskundige/dashboard">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/ervaringsdeskundige/edit_profile">Profiel</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/ervaringsdeskundige/logout">Log uit</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <h1 style="margin: 10px; margin-left: 40px;" class="text-start extra-bold-header">Welkom {{ user.first_name }}👋!</h1>
+
+                  <div id="approved_alert" style="display: none;" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p id="notification-container" class="mb-0 ml-auto"></p>
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                
+                
+
+            </div>
+              <div id="stat_cards" class="row">
+                <div class="col-md-4 card_stat">
+                    <p aria-labelledby="amount_research_completed"  class="number number_1">Loading...</p>
+                    <label class="card-stat-heading h6" id="amount_research_completed">Aantal onderzoeken voltooid</label>
+                </div>
+                <div class="col-md-4 card_stat">
+                    <p aria-labelledby="amount_signed_up_research" class="number number_2">Loading...</p>
+                    <label class="card-stat-heading h6" id="amount_signed_up_research">Aantal ingeschreven onderzoeken</label>
+                </div>
+                <div class="col-md-4 card_stat">
+                    <p aria-labelledby="running_research" class="number number_3">Loading...</p>
+                    <label class="card-stat-heading h6" id="running_research">Lopende onderzoeken</label>
+
+                </div>
+            </div>
+            </div>
+            <div class="row">
+              <div style="border-radius: 20px;" class="col-md-6">
+                  <!-- Eerste tabel -->
+                  <h2 class="p-2">Lopende onderzoeken</h2>
+                  <table class="custom_table table p-3" >
+                    <thead>
+                        <tr>
+                            <th scope="col">Titel</th>
+                            <th scope="col">Omschrijving</th>
+                            <th scope="col">Beloning</th>
+                            <th scope="col">Beperking</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if ongoing_investigations %}
+                            {% for investigation_id, data in ongoing_investigations.items %}
+                                <tr>
+                                    <td><a href="inspect_investigation/{{ data.onderzoek.onderzoeks_id }}">{{ data.onderzoek.titel }}</a></td>
+                                    <td>{{ data.onderzoek.omschrijving }}</td>
+                                    <td>{% if data.onderzoek.met_beloning == 1 %}
+                                        {{ data.onderzoek.beloning }}
+                                    {% else %}
+                                        Geen beloning beschikbaar
+                                    {% endif %}</td>
+                                    <td>
+                                        {% if data.beperkingen %}
+                                            {% for limitation in data.beperkingen %}
+                                                {{ limitation.omschrijving }}{% if not forloop.last %},{% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            Geen beperkingen beschikbaar
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4">Geen lopende onderzoeken beschikbaar.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+              </div>
+              <div class="col-md-6">
+                  <!-- Tweede tabel -->
+                  <h2 class="p-2">Afgeronde onderzoeken</h2>
+                  <table class="custom_table table p-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titel</th>
+                            <th scope="col">Omschrijving</th>
+                            <th scope="col">Beloning</th>
+                            <th scope="col">Beperking</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if finished_investigations %}
+                            {% for investigation_id, data in finished_investigations.items %}
+                                <tr>
+                                    <td><a href="inspect_investigation/{{ data.onderzoek.onderzoeks_id }}">{{ data.onderzoek.titel }}</a></td>
+                                    <td>{{ data.onderzoek.omschrijving }}</td>
+                                    <td>{% if data.onderzoek.met_beloning == 1 %}
+                                        {{ data.onderzoek.beloning }}
+                                    {% else %}
+                                        Geen beloning beschikbaar
+                                    {% endif %}</td>
+                                    <td>
+                                        {% if data.beperkingen %}
+                                            {% for limitation in data.beperkingen %}
+                                                {{ limitation.omschrijving }}{% if not forloop.last %},{% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            Geen beperkingen beschikbaar
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4">Geen afgeronde onderzoeken beschikbaar.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+              </div>
+          </div>
+      </main>
+    </div>
+    </div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    setInterval(function() {
+        $.ajax({
+            url: 'live_dashboard_data',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+              $('.number_1').text(data.count_status_1).css('font-size', '120px');
+              $('.number_2').text(data.count_status_2).css('font-size', '120px');
+              $('.number_3').text(data.count_status_3).css('font-size', '120px');
+              
+                for (const onderzoekId in data.registered_investigations) {
+                    const onderzoek = data.registered_investigations[onderzoekId].onderzoek;
+                    const onderzoekStatus = data.registered_investigations[onderzoekId].status;
+
+                    const meldingKey = `melding_displayed_${onderzoekId}`;
+
+                    if (onderzoekStatus === 3 && !localStorage.getItem(meldingKey)) {
+                        const notificationText = `We hebben goed nieuws voor je! Je bent <strong> goedgekeurd </strong> voor het "${onderzoek.titel}" onderzoek!`;
+                        showNotification(notificationText);
+
+                        $('#approved_alert').css('display', 'block');
+
+                        playSound(mp3FilePath);
+
+                        localStorage.setItem(meldingKey, '1');
+                    }
+                }
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+    }, 500);
+});
+
+function showNotification(text) {
+    var notificationContainer = $('#notification-container');
+    notificationContainer.html('<p>' + text + '</p>');
+}
+
+function playSound(filePath) {
+    const audio = new Audio(filePath);
+    try {
+        audio.play();
+    } catch (error) {
+        console.error('Afspelen van het geluid mislukt:', error);
+    }
+}
+
+const mp3FilePath = '75584bb7-2266-4c41-87f1-97cd5d53b5c4/notification.mp3';
+
+</script>
+{% endblock %}

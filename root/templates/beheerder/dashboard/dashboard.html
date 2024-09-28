@@ -1,0 +1,61 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}Beheerder dashboard{% endblock %}
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="/beheerder/dashboard" class="nav-link active" aria-current="page">
+      Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="/beheerder/onderzoeken" class="nav-link menu_text" >
+      Onderzoeken
+    </a>
+  </li>
+  <li>
+    <a  href="/beheerder/users" class="nav-link menu_text">
+      Gebruikers
+    </a>
+  </li>
+</ul>
+{% endblock %}
+  {% block inner_content %}
+  <br>
+  <div class="container-fluid" style="border-radius: 20px; padding: 30px">
+      <div class="row row-cols-4">
+          <div id="research" class="col border-end">
+              <h2 class="text-center border-bottom pb-1 text-break">Onderzoeken: 0</h2>
+              <div class="card mb-3 flex-fill">
+                  <div class="card-body">
+                      <h5 class="card-title text-center">placeholder</h5>
+                  </div>
+              </div>
+          </div>
+          <div id="experience_expert" class="col border-end">
+              <h2 class="text-center border-bottom pb-1 text-break">Ervaringsdeskundiges: 0</h2>
+              <div class="card mb-3">
+                  <div class="card-body">
+                      <h3 class="card-title text-center text-break h5">placeholder</h3>
+                  </div>
+              </div>
+          </div>
+          <div id="organization" class="col border-end">
+              <h2 class="text-center border-bottom pb-1 text-break">Organisaties: 0</h2>
+              <div class="card mb-3">
+                  <div class="card-body">
+                      <h3 class="card-title text-center h5">placeholder</h3>
+                  </div>
+              </div>
+          </div>
+          <div id="attendance_request" class="col">
+              <h2 class="text-center border-bottom pb-1">Deelname verzoeken: 0</h2>
+              <div class="card mb-3">
+                  <div class="card-body">
+                      <h3 class="card-title text-center h5">placeholder</h3>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endblock %}
+

@@ -1,0 +1,215 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}{{ data.first_name }} {{ data.last_name }} - Inzien{% endblock %}
+
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="/beheerder/dashboard" class="nav-link active" aria-current="page">
+      Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="/beheerder/onderzoeken" class="nav-link menu_text" >
+      Onderzoeken
+    </a>
+  </li>
+  <li>
+    <a  href="/beheerder/users" class="nav-link menu_text">
+      Gebruikers
+    </a>
+  </li>
+</ul>
+{% endblock %}
+{% block inner_content %}
+<br>
+<div class="container rounded-top border border-bottom-0 bg-primary-subtle text-center">
+    <div class="col text-center position-relative">
+        <H2 class="pt-2 h1">
+            {{ data.first_name }} {{ data.last_name }} - Id: {{ data.id}} 
+        </H2>
+        <div class="position-absolute buttons" style="bottom: 10px;">
+            <button type="button" class="btn btn-primary" onclick="location.href='{{ data.id }}/edit';">Bewerk</button>
+            <button type="button" class="btn btn-primary">Verwijder</button>
+        </div>
+        <H2 class="mb-1 h6">Gebruikernaam: {{ data.username }}</H2>
+        <H2 class="m-0 pb-1 h6">
+            {% if data.status == 1 %}
+            Status: In afwachting
+            {% elif data.status == 2 %}
+            Status: Goedgekeurd
+            {% elif data.status == 3 %}
+            Status: Afgekeurd
+            {% elif data.status == 4 %}
+            Status: Gesloten
+            {% elif data.status == 5 %}
+            Status: Verwijderd
+            {% endif %}
+        </p>
+    </div>
+</div>
+<div class="container border rounded-bottom bg-body text-start" style="min-height: 25rem;">
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Kenmerken</H2>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Geboortedatum:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.geboortedatum }}    
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Geslacht:</h3>
+            <div class="container-fluid">
+                <p>
+                    {% if data.geslacht == "M" %}
+                    Man
+                    {% elif data.geslacht == "V" %}
+                    Vrouw
+                    {% else %}
+                    Anders
+                    {% endif %}   
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Beperkingen:</h3>
+            <div class="container-fluid">
+                <p>
+                    {% for limitation in limitations %}
+                        {{ limitation.omschrijving }}{% if not forloop.last %},{% endif %}
+                    {% empty %}
+                        Geen
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Gebruikte hulpmiddelen:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.gebruikte_hulpmiddelen }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% if data.toezichthouder != NULL %}
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Toezichthouders</H2>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Naam:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.Toezichthouders.voornaam_1 }} {{ data.Toezichthouders.achternaam_1 }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Naam:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.Toezichthouders.voornaam_2 }} {{ data.Toezichthouders.achternaam_2 }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Contact informatie</H3>
+        <div class="col-md-auto border-end">
+            <h5>Telefoonnummer:</h5>
+            <div class="container-fluid">
+                <p>
+                    {{ data.telefoonnummer }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">E-mail:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.email }}
+                </p>
+            </div>
+        </div>
+        {% if data.toezichthouder != NULL %}
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Toezichthouders telefoonnummer:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.Toezichthouders.telefoonnummer_1 }} - {{ data.Toezichthouders.telefoonnummer_2 }}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Postcode:</h3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.postcode }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Toevoegende informatie</H2>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Bijzonderingen beschickbaarheid:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.bijzonderheden_beschikbaarheid }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Bijzonderingen:</H3>
+            <div class="container-fluid">
+                <p>
+                    {% if data.bijzonderingen != '' %}
+                    {{ data.bijzonderheden }}
+                    {% else %}
+                    -
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Voorkeur benadering:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.voorkeur_benadering }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Datum aangemeld:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.date_joined }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% if data.datum != NULL %}
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Keurings informatie:</H2>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Keurings datum:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.datum_goedgekeurd }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Gekeurings door:</H3>
+            <div class="container-fluid">
+                <p>
+                    {{ data.goedegekeurd_door }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

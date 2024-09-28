@@ -1,0 +1,20 @@
+{
+    "titel": "Voorbeeld",
+    "organisatie_id": "2",
+    "omschrijving": "Di",
+    "datum_vanaf": "2024-03-01T12:00:00Z",
+    "datum_tot": "2024-03-15T12:00:00Z",
+    "soort_onderzoek": 1,
+    "locatie": "Ergens",
+    "met_beloning": 1,
+    "beloning": "Een",
+    "doelgroep_leeftijd_van": 18,
+    "doelgroep_leeftijd_tot": 65,
+    "contact_opgenomen": 1,
+    "type_onderzoek": 1,
+    "beperkingen": [
+        {"beperking_id": 1},
+        {"beperking_id": 2},
+        {"beperking_id": 3}
+    ]
+}

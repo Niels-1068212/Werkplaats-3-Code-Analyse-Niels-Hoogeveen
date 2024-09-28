@@ -1,0 +1,24 @@
+<h2 class="text-center border-bottom pb-1 text-break h3">Organisaties: {{ count_organization }}</h2>
+{% for item in organization %}
+<div id="{{ item.organisatie_id }}" class="card mb-3 md-2" style="cursor: pointer;" tabindex="0" onclick="location.href='dashboard/organization/{{ item.organisatie_id }}';">
+    <div class="card-body">
+        <h3 class="card-title text-center h5">{{ item.naam }}</h3>
+        <h3 class="card-subtitle mb-2 text-body-secondary text-center h6"><strong>KVK: </strong>{{ item.kvk }}</h3>
+        <ul class="list-group list-group-flush">
+            {% if item.type == '1' %}
+            <li class="list-group-item"><strong>Type: </strong>Commerciëel</li>
+            {% elif item.type == '2' %}
+            <li class="list-group-item"><strong>Type: </strong>Non-profit</li>
+            {% endif %}
+            <li class="list-group-item"><strong>Contact persoon: </strong>{{ item.contact_persoon }}</li>
+            <li class="list-group-item"><strong>E-mail: </strong>{{ item.email }}</li>
+            <li class="list-group-item"><strong>Telefoonnummer: </strong>{{ item.telefoonnummer }}</li>
+            <li class="list-group-item"><strong>Website: </strong>{{ item.website }}</li>
+            <li class="list-group-item text-center">
+                <button onclick="goedkeurenOrganisatie('{{ item.organisatie_id }}');" class="btn btn-success">Keur goed</button>
+                <button onclick="afkeurenOrganisatie('{{ item.organisatie_id }}');" class="btn btn-danger">Keur af</button>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endfor %}

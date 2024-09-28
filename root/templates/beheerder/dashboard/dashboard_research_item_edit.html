@@ -1,0 +1,251 @@
+{% extends "beheerder/inner_base.html" %}
+{% block title %}{{ data.titel }} - Bewerken{% endblock %}
+{% block menu_active %}
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a href="/beheerder/dashboard" class="nav-link active" aria-current="page">
+      Dashboard
+    </a>
+  </li>
+  <li>
+    <a href="/beheerder/onderzoeken" class="nav-link menu_text" >
+      Onderzoeken
+    </a>
+  </li>
+  <li>
+    <a  href="/beheerder/users" class="nav-link menu_text">
+      Gebruikers
+    </a>
+  </li>
+</ul>
+{% endblock %}
+{% block inner_content %}
+<br>
+<form method="POST" action="/beheerder/dashboard/research/{{ data.onderzoeks_id }}/edit/save">
+    {% csrf_token %}
+<div class="container rounded-top border border-bottom-0 bg-primary-subtle text-center">
+    <div class="col text-center position-relative">
+        <div class="d-flex pt-2 mb-1 justify-content-center">
+            <label for="research_titel" class="input-group-text rounded-end-0 border-end-0">Titel</label>
+            <input id="research_titel" type="text" name="titel" class="form-control rounded-start-0" value="{{ data.titel }}" placeholder="{{ data.titel }}" style="width: 20%;"> 
+            <H2 class="m-0 pb-1"> - Id: {{ data.onderzoeks_id}}</H2>
+        </div>
+        <div class="position-absolute buttons" style="bottom: 10px;">
+            <button type="submit" class="btn btn-primary">Opslaan</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='../{{ data.onderzoeks_id }}';">Annuleer</button>
+        </div>
+        <H2 class="mb-1 h6">Verzocht door: {{ data.organisatie.naam }}</H2>
+        <input type="hidden" id="organization_research" name="organisatie" value="{{ data.organisatie.organisatie_id }}">
+        <div class="d-flex pt-2 mb-0 justify-content-center">
+            <div class="form-floating mb-2">
+                <select aria-label="Kuering" id="status_select" name="status" class="form-select">
+                    {% if data.status == 1 %}
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=3>Afgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 2 %}
+                        <option value=2>Goedgekeurd</option>
+                        <option value=1>In afwachting</option>
+                        <option value=3>Afgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 3 %}
+                        <option value=3>Afgekeurd</option>
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=4>Gesloten</option>
+                    {% elif data.status == 4 %}
+                        <option value=4>Gesloten</option>
+                        <option value=1>In afwachting</option>
+                        <option value=2>Goedgekeurd</option>
+                        <option value=3>Afgekeurd</option>
+                    {% endif %}
+                </select>
+                <label for="status_select">Status</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container border rounded-bottom bg-body text-start" style="min-height: 25rem;">
+    <div class="row m-1 border-bottom">
+        <div class="col-md-auto">
+            <H2 id="research_description_label" class="h3">Omschrijving</H2>
+            <div class="container-fluid mb-2">
+                <textarea aria-labelledby="research_description_label" id="research_description" type="text" name="omschrijving" class="form-control" placeholder="{{ data.omschrijving }}">{{ data.omschrijving }}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Informatie doelgroep</H2>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Leeftijd:</h3>
+            <div class="container-fluid mb-1">
+                <label class="input-group-number">Van</label>
+                <input type="number" min="0" class="form-control" value="{{ data.doelgroep_leeftijd_van }}" name="doelgroep_leeftijd_van" aria-label="doelgroep leeftijd van">
+                <label class="input-group-number">Tot</label>
+                <input type="number" min="0" class="form-control" value="{{ data.doelgroep_leeftijd_tot }}" name="doelgroep_leeftijd_tot" aria-label="doelgroep leeftijd tot">
+                <label class="input-group-number">Jaar oud</label>
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <h3 class="h5">Beperkingen:</h3>
+            <div class="container-fluid">
+                <div class="form-check">
+                    <h4 class="h6" label="Auditieve beperking" aria-label="Auditieve beperking">Auditieve beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Auditieve beperking" %}
+                            {% if limitation.id in research_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="auditieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="auditieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="auditieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="auditieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                  <br>
+                <div class="form-check">
+                    <h4 class="h6" label="Visuele beperking" aria-label="Visuele beperking">Visuele beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Visuele beperking" %}
+                            {% if limitation.id in research_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="visuele-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="visuele-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="visuele-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="visuele-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                  <br>
+                <div class="form-check">
+                    <h4 class="h6" label="Motorische / lichamelijke beperking" aria-label="Motorische / lichamelijke beperking">Motorische / lichamelijke beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Motorische / lichamelijke beperkingen" %}
+                            {% if limitation.id in research_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="motorische-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="motorische-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="motorische-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="motorische-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                  <br>
+                <div class="form-check">
+                    <h4 class="h6" label="Cognitieve / neurologische beperking" aria-label="Cognitieve / neurologische beperking">Cognitieve / neurologische beperking</h4>
+                    {% for limitation in all_limitations %}
+                        {% if limitation.soort == "Cognitieve / neurologische beperkingen" %}
+                            {% if limitation.id in research_limitations_id_list %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="cognitieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}" checked aria-checked="true">
+                                    <label class="form-check-label" for="cognitieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selected_limitations[]" id="cognitieve-{{ limitation.id }}" value="{{ limitation.id }}" aria-label="{{ limitation.omschrijving }}">
+                                    <label class="form-check-label" for="cognitieve-{{ limitation.id }}">{{ limitation.omschrijving }}</label>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-1 border-bottom">
+        <H2 class="h3">Factuele informatie</H2>
+        <div class="col-md-auto border-end">
+            <H3 id="research_type_select_label" class="h5">Soort onderzoek:</H3>
+            <div class="container-fluid mb-2">
+                <select aria-labelledby="research_type_select_label" id="research_type_select" name="type_onderzoek" class="form-select">
+                    {% if data.soort_onderzoek == 1 %}
+                        <option value=1>Telefonisch</option>
+                        <option value=2>Via internet</option>
+                        <option value=3>Op locatie</option>
+                    {% elif data.soort_onderzoek == 2 %}
+                        <option value=2>Via internet</option>
+                        <option value=1>Telefonisch</option>
+                        <option value=3>Op locatie</option>
+                    {% elif data.soort_onderzoek == 3 %}
+                        <option value=3>Op locatie</option>
+                        <option value=1>Telefonisch</option>
+                        <option value=2>Via internet</option>
+                    {% endif %}
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 id="research_location_label" class="h5">Locatie:</H3>
+            <div class="container-fluid mb-2">
+                <input id="research_location" name="locatie" type="text" aria-labelledby="Locatie" class="form-control" value="{{ data.locatie }}" placeholder="{{ data.locatie }}">
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Beloning:</H3>
+            <div class="container-fluid mb-2">
+                <script>
+                    function selectReward() {
+                        if (document.getElementById("research_reward")) {
+                            document.getElementById("research_with_reward").innerHTML = ""
+                        } else {
+                            document.getElementById("research_with_reward").innerHTML = ('<input id="research_reward" type="text" aria-label="Beloning" class="form-control" value="{{ data.beloning }}" placeholder="{{ data.beloning }}"></input>')
+                        }
+                    }
+                </script>
+                <select aria-label="Onderzoek beloning met of zonder" id="reward_select" name="met_beloning" class="form-select mb-1" onchange="selectReward()">
+                    {% if data.met_beloning == 0 %}
+                        <option value=0>Nee</option>
+                        <option value=1>Ja</option>
+                    {% elif data.met_beloning == 1 %}
+                        <option value=1 >Ja</option>
+                        <option value=0>Nee</option>
+                    {% endif %}
+                </select>
+                {% if data.met_beloning == 0 %}
+                <div id="research_with_reward">
+                </div>
+                {% elif data.met_beloning == 1 %}
+                <div id="research_with_reward">
+                    <input id="research_reward" name="beloning hoeveelheid" type="text" aria-label="Beloning" class="form-control" value="{{ data.beloning }}" placeholder="{{ data.beloning }}"></input>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-auto border-end">
+            <H3 class="h5">Datum:</H3>
+            <div class="container-fluid mb-2">
+                <label>Van</label>
+                <input name="datum_vanaf" class="form-control" type="datetime-local" aria-label="Datum onderzoek vanaf" value="{{ data.datum_vanaf }}">
+                <label>Tot</label>
+                <input name="datum_tot" class="form-control" type="datetime-local" aria-label="Datum onderzoek tot" value="{{ data.datum_tot }}">
+            </div>
+        </div>
+    </div>
+    <div class="row m-1">
+        <H2 class="h3">Toevoegende informatie</H2>
+        <div class="col-md-auto border-end">
+            <H3 id="admin_comments_label" class="h5">Beheerder opmerkingen:</H3>
+            <div class="container-fluid mb-2">
+                <textarea id="admin_comments" name="opmerkingen_beheerder" type="text" aria-labelledby="admin_comments_label" class="form-control" placeholder="{{ data.opmerkingen_beheerder }}">{{ data.opmerkingen_beheerder }}</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}
