@@ -3,7 +3,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from main.models import Organisaties, Onderzoeken, Beperkingen, Deelnames
 from ervaringsdeskundige.models import (
-    BeperkingenOnderzoeken,
+    BeperkingenOnderzoeken, User
     )
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
@@ -15,6 +15,7 @@ from main.serializers import (
     ExperienceExpertSerializer
     )
 from rest_framework.response import Response
+import hashlib
 
 
 def index(request):
@@ -22,29 +23,44 @@ def index(request):
 
 
 def custom_login(request):
-    if request.user.is_authenticated and request.user.is_staff == 1:
-        return redirect("/beheerder/dashboard")
-
-    if request.user.is_authenticated and request.user.is_staff == 0:
-        return redirect("/ervaringsdeskundige/dashboard")
+    if request.user.is_authenticated:
+        return redirect("/beheerder/dashboard" if request.user.is_staff else "/ervaringsdeskundige/dashboard")
 
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None and user.status == 2:
-            auth_login(request, user)
-            if request.user.is_authenticated and request.user.is_staff == 1:
-                return redirect("/beheerder/dashboard")
 
-            if request.user.is_authenticated and request.user.is_staff == 0:
-                return redirect("/ervaringsdeskundige/dashboard")
-        else:
-            messages.success(request, ("Het inloggen ging fout"))
-            return render(request, "home/login.html", {})
+        try:
+            user = User.objects.get(username=username)
+            print(f"User found: {user.username}")
 
-    else:
-        return render(request, "home/login.html", {})
+            # Haal opgeslagen salt uit de database
+            salt_hex = user.salt
+            salt = bytes.fromhex(salt_hex)
+
+            # hash het ww met de salt
+            hashed_password = hashlib.pbkdf2_hmac(
+                'sha256',
+                password.encode('utf-8'),
+                salt,
+                100000
+            )
+
+            hashed_password_hex = hashed_password.hex() #maak er weer hex van
+
+            # Vergelijk de hashes, als ze hetzelfde zijn is de login complete
+            if hashed_password_hex == user.password and user.is_active:
+                print(f"Login successful for user: {user.username}")
+                auth_login(request, user)
+                return redirect("/beheerder/dashboard" if user.is_staff else "/ervaringsdeskundige/dashboard") # check if_staff, navigeer naar verschillende pagina's
+            else:
+                print("Wachtwoord is onjuist.")
+        except User.DoesNotExist:
+            print("User does not exist.")
+
+    return render(request, "home/login.html", {})
+
+
 
 
 def register(request):

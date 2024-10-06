@@ -2,6 +2,7 @@ from .forms import RegisterForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+import hashlib
 from .forms import RegisterForm, ToezichthoudersForm, UserEditForm
 from main.models import (
     Onderzoeken,
@@ -15,6 +16,7 @@ from .models import BeperkingenOnderzoeken
 from django.http import JsonResponse, FileResponse
 from django.contrib.staticfiles import finders
 import datetime
+import os
 
 
 def register(request):
@@ -25,12 +27,30 @@ def register(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
 
-            #lijst uit het formulier ophalen
+            raw_password = form.cleaned_data['password1'] # password uit formulier
+
+            salt = os.urandom(32) 
+            salt_hex = salt.hex() # zo past hij in de varchar(64)
+            print(f"Salt hex: {salt_hex}")
+
+            hashed_password = hashlib.pbkdf2_hmac(
+                'sha256',
+                raw_password.encode('utf-8'),
+                salt,
+                100000
+            )
+            hashed_password_hex = hashed_password.hex()
+
+            user.password = hashed_password_hex
+            user.salt = salt_hex
+            user.save()
+
+            # lijst uit het formulier ophalen
             selected_limitations = request.POST.getlist("selected_limitations[]")
 
-            #per beperking opslaan als losse rij in de database
+            # per beperking opslaan als losse rij in de database
             for selected_limitation in selected_limitations:
                 ervaringsdeskundige_beperking = BeperkingenErvaringsdeskundigen(
                     beperking_id=int(selected_limitation),

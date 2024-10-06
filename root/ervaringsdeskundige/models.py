@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from datetime import date
+import os
+import hashlib
 
 
 class Toezichthouders(models.Model):
@@ -57,6 +59,18 @@ class User(AbstractUser):
         help_text="Specific permissions for this user.",
         related_query_name="user",
     )
+    salt = models.CharField(max_length=64, null=True)  # charfield voor de hex salt
+
+    def set_password(self, raw_password: str):
+        self.salt = os.urandom(32).hex()  # maak een salt aan
+        hashed_password = hashlib.pbkdf2_hmac(
+            'sha256',
+            raw_password.encode('utf-8'),
+            bytes.fromhex(self.salt),
+            100000
+        ).hex()  # Van bytes naar hex
+        self.password = hashed_password  # sla het gehaste password op
+
 
     def age(self):
         date_today = date.today()

@@ -14,7 +14,7 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'postcode', 'geslacht','email', 'telefoonnummer', 'geboortedatum', 'gebruikte_hulpmiddelen',
-                  'bijzonderheden', 'bijzonderheden_beschikbaarheid', 'username', 'voorkeur_benadering', 'beschikbaar_vanaf', 'beschikbaar_tot')
+                  'bijzonderheden', 'bijzonderheden_beschikbaarheid', 'username', 'voorkeur_benadering', 'beschikbaar_vanaf', 'beschikbaar_tot', 'password1')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
